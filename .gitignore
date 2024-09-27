@@ -13,6 +13,7 @@ output/
 jobs/logs/
 jobs/errors/
 
+venv/
 dist/
 notes/
 results/

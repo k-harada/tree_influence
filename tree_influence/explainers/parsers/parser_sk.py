@@ -146,7 +146,7 @@ def parse_skgbm_ensemble(model, lt_op=0, is_float32=False):
 
     # classification
     else:
-        assert model_params['loss'] == 'deviance'
+        assert model_params['loss'] == 'log_loss'
         class_prior = model.init_.class_prior_
         n_class = class_prior.shape[0]
 

@@ -115,6 +115,7 @@ class TreeEnsemble(object):
     """
     Standardized tree-ensemble model.
     """
+
     def __init__(self, trees, objective, tree_type, bias,
                  learning_rate, l2_leaf_reg, factor):
         """
@@ -133,6 +134,10 @@ class TreeEnsemble(object):
         self.objective = objective
         self.tree_type = tree_type
         self.bias = bias
+        # HistGradientBoostingClassifier returns list of list as bias when binary
+        if objective == "binary":
+            while not isinstance(self.bias, float):
+                self.bias = self.bias[0]
         self.learning_rate = learning_rate
         self.l2_leaf_reg = l2_leaf_reg
         self.factor = factor
