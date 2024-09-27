@@ -135,7 +135,7 @@ class TreeEnsemble(object):
         self.tree_type = tree_type
         self.bias = bias
         # HistGradientBoostingClassifier returns list of list as bias when binary
-        if objective == "binary":
+        if objective in ['regression', 'binary']:
             while not isinstance(self.bias, float):
                 self.bias = self.bias[0]
         self.learning_rate = learning_rate

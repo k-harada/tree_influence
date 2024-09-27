@@ -65,7 +65,7 @@ def parse_skhgbm_ensemble(model, lt_op=0, is_float32=False):
 
     # regression
     if model._estimator_type == 'regressor':
-        assert model_params['loss'] == 'least_squares'
+        assert model_params['loss'] == 'squared_error'
         bias = model._baseline_prediction  # target mean
         objective = 'regression'
         factor = 0
@@ -139,7 +139,7 @@ def parse_skgbm_ensemble(model, lt_op=0, is_float32=False):
 
     # regression
     if hasattr(model.init_, 'constant_'):
-        assert model_params['loss'] == 'ls'  # least squares
+        assert model_params['loss'] == 'squared_error'  # least squares
         bias = model.init_.constant_.flatten()[0]  # log space
         objective = 'regression'
         factor = 0

@@ -1,12 +1,12 @@
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.datasets import load_breast_cancer
+from sklearn.datasets import fetch_california_housing
 
-from xgboost import XGBClassifier
-from lightgbm import LGBMClassifier
-from catboost import CatBoostClassifier
-from sklearn.ensemble import HistGradientBoostingClassifier
-from sklearn.ensemble import GradientBoostingClassifier
+from xgboost import XGBRegressor
+from lightgbm import LGBMRegressor
+from catboost import CatBoostRegressor
+from sklearn.ensemble import HistGradientBoostingRegressor
+from sklearn.ensemble import GradientBoostingRegressor
 
 from tree_influence.explainers import LeafInfluence
 
@@ -14,10 +14,10 @@ from tree_influence.explainers import BoostIn
 
 
 def get_toy_data(dataset, objective, random_state, test_size=0.2):
-    data = load_breast_cancer()
+    data = fetch_california_housing()
     X = data['data']
     y = data['target']
-    task = 'binary'
+    task = 'regression'
     stratify = y if task in ['binary', 'multiclass'] else None
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size,
                                                         random_state=random_state,
@@ -35,10 +35,10 @@ def calc_influence(model, X_train, y_train, X_test, y_test):
 
 def test_xgb():
     X_train, X_test, y_train, y_test = get_toy_data(
-        'breast_cancer', 'binary', 0
+        'california_housing', 'regression', 0
     )
-    model = XGBClassifier(
-        base_score=0.5,  # necessary to reproduce
+    model = XGBRegressor(
+        base_score=0.0,  # necessary to reproduce
         reg_lambda=1.0,  # not necessary, but you must not set 0
     )
     model.fit(X_train, y_train)
@@ -47,9 +47,9 @@ def test_xgb():
 
 def test_lgb():
     X_train, X_test, y_train, y_test = get_toy_data(
-        'breast_cancer', 'binary', 0
+        'california_housing', 'regression', 0
     )
-    model = LGBMClassifier()
+    model = LGBMRegressor()
     model.fit(X_train, y_train)
 
     inf_values = calc_influence(model, X_train, y_train, X_test, y_test)
@@ -57,9 +57,9 @@ def test_lgb():
 
 def test_cb():
     X_train, X_test, y_train, y_test = get_toy_data(
-        'breast_cancer', 'binary', 0
+        'california_housing', 'regression', 0
     )
-    model = CatBoostClassifier(
+    model = CatBoostRegressor(
         leaf_estimation_iterations=1
     )
     model.fit(X_train, y_train)
@@ -69,9 +69,9 @@ def test_cb():
 
 def test_shb():
     X_train, X_test, y_train, y_test = get_toy_data(
-        'breast_cancer', 'binary', 0
+        'california_housing', 'regression', 0
     )
-    model = HistGradientBoostingClassifier()
+    model = HistGradientBoostingRegressor()
     model.fit(X_train, y_train)
 
     inf_values = calc_influence(model, X_train, y_train, X_test, y_test)
@@ -79,9 +79,9 @@ def test_shb():
 
 def test_sgb():
     X_train, X_test, y_train, y_test = get_toy_data(
-        'breast_cancer', 'binary', 0
+        'california_housing', 'regression', 0
     )
-    model = GradientBoostingClassifier()
+    model = GradientBoostingRegressor()
     model.fit(X_train, y_train)
 
     inf_values = calc_influence(model, X_train, y_train, X_test, y_test)
